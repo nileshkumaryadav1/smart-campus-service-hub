@@ -1,36 +1,197 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Smart Campus Service Hub
 
-First, run the development server:
+A simple web application that works as a **single digital platform for college campus services**.
+It helps students and admins manage notices, events, issues, and lost & found items easily.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Problem Statement 
+Students usually get campus information from many different places like notice boards, WhatsApp groups, or word of mouth.  
+This causes confusion and missed updates.
+
+**Smart Campus Service Hub** solves this by providing **one common platform** for all campus-related information.
+
+---
+
+## Project's motivation
+- Provide one place for all campus notices and events
+- Allow students to raise complaints online
+- Manage lost & found items digitally
+- Make communication between students and admins easy
+
+---
+
+## User Roles
+
+### Student
+- Register and login
+- View notices and events
+- Raise issues (hostel, wifi, classroom, etc.)
+- Add lost or found items
+- Search and filter information
+
+### Admin
+- Login as admin
+- Post notices and events
+- View and update student issues
+- Manage lost & found posts
+
+---
+
+## Technology Used
+
+### Frontend
+- Next.js
+- React.js
+- Tailwind CSS
+
+### Backend
+- Next.js API Routes
+- MongoDB
+- Mongoose
+- JWT Authentication
+
+### Deployment
+- Vercel
+- MongoDB Atlas
+
+---
+
+## Main Features
+- User Authentication (Student / Admin)
+- Role-based access control
+- Notices and events section
+- Issue / complaint management
+- Lost & found section
+- Search and filter functionality
+- Responsive UI
+
+---
+
+## Project Structure
+```
+/app
+/components
+/models
+/api
+/public
+```
+---
+
+## Database Collections
+
+### User
+- name
+- email
+- password
+- role
+
+### Post
+- title
+- description
+- type (notice/event)
+- createdAt
+
+### Issue
+- title
+- category
+- description
+- status
+
+### Lost & Found
+- itemName
+- description
+- type (lost/found)
+- contact
+
+---
+
+## Setup & Installation
+
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB Atlas account
+- Git
+
+### Step 1: Clone the Repository
+```
+git clone https://github.com/your-username/smart-campus-service-hub.git
+cd smart-campus-service-hub
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Step 2: Install Dependencies
+```
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Step 3: Create Environment File
+Create a file named `.env.local` and add:
+```
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Step 4: Run the Project
+```
+npm run dev
+```
 
-## Learn More
+Open browser and visit:
+```
+http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment Steps
+1. Push project to GitHub
+2. Login to Vercel
+3. Import GitHub repository
+4. Add environment variables
+5. Click Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Testing
+- Manual testing of UI
+- API testing using browser/Postman
+- Role-based access testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Limitations
+- No email notifications
+- Limited admin analytics
+- No mobile app
+
+---
+
+## Future Improvements
+- Mobile application
+- Push notifications
+- Admin analytics dashboard
+- PWA support
+
+---
+
+## Conclusion
+Smart Campus Service Hub makes campus communication simple, digital, and organized.
+It saves time for students and admins and improves overall campus management.
+
+---
+
+## Developer
+- **Nilesh Kumar**  
+B.Tech (2024-28)  
+Katihar Engineering College, Katihar
+
+- **Swati Priya**  
+B.Tech (2024-28)  
+Katihar Engineering College, Katihar
+
+- **Jeevan Prem**  
+B.Tech (2024-28)  
+Katihar Engineering College, Katihar
