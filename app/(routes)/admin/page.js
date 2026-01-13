@@ -91,7 +91,7 @@ export default function AdminPage() {
         {cards.map(({ label, count, icon: Icon, href, color }) => (
           <div
             key={label}
-            className="flex flex-col justify-between p-5 rounded-xl border bg-white shadow-sm hover:shadow-md transition"
+            className="flex flex-col justify-between p-5 rounded-xl border border-[var(--border)] bg-white shadow-sm hover:shadow-md transition"
           >
             <div className="flex items-center gap-4">
               <div className={`p-3 rounded-lg ${color}`}>

@@ -88,7 +88,7 @@ export default function EditPost() {
         type="text"
         placeholder="Title"
         required
-        className="border w-full p-2 mb-3 rounded"
+        className="border border-[var(--border)] w-full p-2 mb-3 rounded"
         value={post.title}
         onChange={(e) => setPost({ ...post, title: e.target.value })}
       />
@@ -96,7 +96,7 @@ export default function EditPost() {
       <textarea
         placeholder="Description"
         required
-        className="border w-full p-2 mb-3 rounded"
+        className="border border-[var(--border)] w-full p-2 mb-3 rounded"
         value={post.description}
         onChange={(e) => setPost({ ...post, description: e.target.value })}
       />

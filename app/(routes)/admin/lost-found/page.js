@@ -127,13 +127,13 @@ export default function AdminLostFound() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <input
           placeholder="Search title or location…"
-          className="border rounded-lg px-4 py-2"
+          className="border border-[var(--border)] rounded-lg px-4 py-2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="border rounded-lg px-4 py-2"
+          className="border border-[var(--border)] rounded-lg px-4 py-2"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
@@ -143,7 +143,7 @@ export default function AdminLostFound() {
         </select>
 
         <select
-          className="border rounded-lg px-4 py-2"
+          className="border border-[var(--border)] rounded-lg px-4 py-2"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -164,7 +164,7 @@ export default function AdminLostFound() {
         {filteredItems.map((item) => (
           <div
             key={item._id}
-            className="bg-white border rounded-2xl p-5 shadow-sm hover:shadow-md transition"
+            className="bg-white border border-[var(--border)] rounded-2xl p-5 shadow-sm hover:shadow-md transition"
           >
             <div className="flex justify-between gap-4">
               <div>
@@ -232,7 +232,7 @@ export default function AdminLostFound() {
 /* small Stat cards */
 function Stat({ label, value }) {
   return (
-    <div className="bg-white border rounded-xl px-4 py-2 shadow-sm text-center">
+    <div className="bg-white border border-[var(--border)] rounded-xl px-4 py-2 shadow-sm text-center">
       <p className="text-xs text-gray-500">{label}</p>
       <p className="text-lg font-semibold">{value}</p>
     </div>

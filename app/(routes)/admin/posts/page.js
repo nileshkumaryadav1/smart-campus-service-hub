@@ -133,13 +133,13 @@ export default function AdminPosts() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <input
           placeholder="Search by title or type…"
-          className="border rounded-lg px-4 py-2"
+          className="border border-[var(--border)] rounded-lg px-4 py-2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="border rounded-lg px-4 py-2"
+          className="border border-[var(--border)] rounded-lg px-4 py-2"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
@@ -222,7 +222,7 @@ export default function AdminPosts() {
    ====================== */
 function Stat({ label, value }) {
   return (
-    <div className="bg-white border rounded-xl px-4 py-2 shadow-sm text-center">
+    <div className="bg-white border border-[var(--border)] rounded-xl px-4 py-2 shadow-sm text-center">
       <p className="text-xs text-gray-500">{label}</p>
       <p className="text-lg font-semibold">{value}</p>
     </div>

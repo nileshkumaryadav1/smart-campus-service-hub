@@ -82,11 +82,11 @@ export default function NoticeEventsPage() {
           placeholder="Search notices or events..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-lg px-3 py-2 md:col-span-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2 md:col-span-2"
         />
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
@@ -96,7 +96,7 @@ export default function NoticeEventsPage() {
         </select>
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
@@ -121,7 +121,7 @@ export default function NoticeEventsPage() {
           {filteredPosts.map((item) => (
             <div
               key={item._id}
-              className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
+              className="bg-white border border-[var(--border)] rounded-xl p-5 shadow-sm hover:shadow-md transition"
             >
               <div className="flex justify-between items-start gap-3">
                 <h2 className="font-semibold text-lg line-clamp-2">

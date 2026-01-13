@@ -19,7 +19,7 @@ export default function EventsPage() {
         {events.map((event) => (
           <div
             key={event._id}
-            className="border p-4 rounded-md shadow-sm"
+            className="border border-[var(--border)] p-4 rounded-md shadow-sm"
           >
             <h2 className="text-lg font-semibold">{event.title}</h2>
             <p className="text-sm text-gray-600">{event.description}</p>

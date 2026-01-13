@@ -19,7 +19,7 @@ export default function NoticesPage() {
         {posts.map((post) => (
           <div
             key={post._id}
-            className="border p-4 rounded-md shadow-sm"
+            className="border border-[var(--border)] p-4 rounded-md shadow-sm"
           >
             <h2 className="text-lg font-semibold">{post.title}</h2>
             <p className="text-sm text-gray-600">{post.description}</p>

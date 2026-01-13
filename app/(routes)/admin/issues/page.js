@@ -146,13 +146,13 @@ export default function AdminIssuesPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <input
           placeholder="Search by title, category or reporter..."
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -163,7 +163,7 @@ export default function AdminIssuesPage() {
         </select>
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
@@ -175,7 +175,7 @@ export default function AdminIssuesPage() {
         </select>
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
@@ -205,7 +205,7 @@ export default function AdminIssuesPage() {
             return (
               <div
                 key={issue._id}
-                className="bg-white border border-gray-300 rounded-2xl p-5 shadow-sm hover:shadow-lg transition flex flex-col gap-3"
+                className="bg-white border border-[var(--border)] rounded-2xl p-5 shadow-sm hover:shadow-lg transition flex flex-col gap-3"
               >
                 {/* Title & Status */}
                 <div className="flex justify-between items-start gap-3">
@@ -296,7 +296,7 @@ function ActionButton({ label, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="px-4 py-1.5 rounded-lg border text-sm hover:bg-gray-100 transition"
+      className="px-4 py-1.5 rounded-lg border border-[var(--border)] text-sm hover:bg-gray-100 transition"
     >
       {label}
     </button>

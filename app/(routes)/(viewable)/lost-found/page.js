@@ -126,7 +126,7 @@ export default function LostFoundPage() {
         {!user && (
           <a
             href="/login"
-            className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-50 transition"
+            className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium hover:bg-gray-50 transition"
           >
             👤 Login to report
           </a>
@@ -134,16 +134,16 @@ export default function LostFoundPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border rounded-2xl p-5 shadow-sm grid gap-4 md:grid-cols-4">
+      <div className="bg-white border border-[var(--border)] rounded-2xl p-5 shadow-sm grid gap-4 md:grid-cols-4">
         <input
           placeholder="Search items…"
-          className="border rounded-lg px-4 py-2 md:col-span-2"
+          className="border border-[var(--border)] rounded-lg px-4 py-2 md:col-span-2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
@@ -153,7 +153,7 @@ export default function LostFoundPage() {
         </select>
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="border border-[var(--border)] rounded-lg px-3 py-2"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -163,7 +163,7 @@ export default function LostFoundPage() {
         </select>
 
         <select
-          className="border rounded-lg px-3 py-2 md:col-span-4"
+          className="border border-[var(--border)] rounded-lg px-3 py-2 md:col-span-4"
           value={sort}
           onChange={(e) => setSort(e.target.value)}
         >
@@ -177,7 +177,7 @@ export default function LostFoundPage() {
       {user && (
         <form
           onSubmit={submit}
-          className="bg-white border rounded-2xl p-6 shadow-sm space-y-4"
+          className="bg-white border border-[var(--border)] rounded-2xl p-6 shadow-sm space-y-4"
         >
           <h2 className="font-semibold text-lg">Report Lost / Found</h2>
 
@@ -185,18 +185,14 @@ export default function LostFoundPage() {
             <input
               required
               placeholder="Item title"
-              className="border rounded-lg px-4 py-2"
+              className="border border-[var(--border)] rounded-lg px-4 py-2"
               value={form.title}
-              onChange={(e) =>
-                setForm({ ...form, title: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
             <select
-              className="border rounded-lg px-4 py-2"
+              className="border border-[var(--border)] rounded-lg px-4 py-2"
               value={form.type}
-              onChange={(e) =>
-                setForm({ ...form, type: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, type: e.target.value })}
             >
               <option value="lost">Lost</option>
               <option value="found">Found</option>
@@ -206,21 +202,17 @@ export default function LostFoundPage() {
           <textarea
             required
             placeholder="Description"
-            className="border rounded-lg px-4 py-2 min-h-[120px]"
+            className="border border-[var(--border)] rounded-lg px-4 py-2 min-h-[120px] w-full"
             value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
 
-          <div className="flex gap-4">
+          <div className="md:flex gap-4 space-y-4 md:space-y-0">
             <input
               placeholder="Location"
-              className="border rounded-lg px-4 py-2 flex-1"
+              className="border border-[var(--border)] rounded-lg px-4 py-2 flex-1"
               value={form.location}
-              onChange={(e) =>
-                setForm({ ...form, location: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
             />
             <button
               disabled={submitting}
@@ -245,24 +237,28 @@ export default function LostFoundPage() {
         {filteredItems.map((item) => (
           <div
             key={item._id}
-            className="bg-white border rounded-2xl p-5 shadow-sm hover:shadow-md transition"
+            className="bg-white border border-[var(--border)] rounded-2xl p-5 shadow-sm hover:shadow-md transition"
           >
             <div className="flex justify-between gap-4">
               <div>
                 <h3 className="font-semibold text-lg">{item.title}</h3>
                 <p className="text-sm text-gray-500">
-                  📍 {item.location || "Not specified"}
+                  Location: {item.location || "Not specified"}
                 </p>
               </div>
 
               <span
-                className={`text-xs px-3 py-1 rounded-full border font-medium ${
+                className={`text-xs px-3 py-3 rounded-lg border border-[var(--border)] font-medium ${
                   TYPE_BADGE[item.type]
                 }`}
               >
                 {item.type.toUpperCase()}
               </span>
             </div>
+
+            <p className="text-xs text-gray-400">
+              {new Date(item.createdAt).toLocaleString()}
+            </p>
 
             <p className="text-sm text-gray-700 mt-4 line-clamp-3">
               {item.description}

@@ -121,7 +121,7 @@ export default function AdminSidebar({
             </div>
             <button
               onClick={handleLogout}
-              className="block p-2 text-red-500 border rounded hover:cursor-pointer"
+              className="block p-2 text-red-500 border border-[var(--border)] rounded hover:cursor-pointer"
             >
               Logout
             </button>

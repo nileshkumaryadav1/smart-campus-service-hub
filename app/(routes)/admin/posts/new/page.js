@@ -26,21 +26,21 @@ export default function CreatePost() {
       <h1 className="text-xl font-bold mb-4">Create Post</h1>
 
       <input
-        className="border w-full p-2 mb-3"
+        className="border border-[var(--border)] w-full p-2 mb-3"
         placeholder="Title"
         onChange={e => setTitle(e.target.value)}
         required
       />
 
       <textarea
-        className="border w-full p-2 mb-3"
+        className="border border-[var(--border)] w-full p-2 mb-3"
         placeholder="Description"
         onChange={e => setDescription(e.target.value)}
         required
       />
 
       <select
-        className="border w-full p-2 mb-3"
+        className="border border-[var(--border)] w-full p-2 mb-3"
         onChange={e => setType(e.target.value)}
       >
         <option value="notice">Notice</option>

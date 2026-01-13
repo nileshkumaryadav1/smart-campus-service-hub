@@ -107,7 +107,7 @@ export default function IssuesPage() {
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Issues</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Campus Issues</h1>
         <p className="text-gray-500 text-sm mt-1">
           Report and track campus issues with real-time status updates
         </p>
@@ -117,35 +117,70 @@ export default function IssuesPage() {
       {user && (
         <form
           onSubmit={handleSubmit}
-          className="bg-white border rounded-2xl p-6 shadow-sm space-y-4"
+          className="
+      bg-white border border-black/5 rounded-2xl p-6 md:p-7
+      shadow-sm hover:shadow-md transition
+      space-y-5
+    "
         >
-          <h2 className="font-semibold text-lg">Report an Issue</h2>
+          {/* Header */}
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold tracking-tight">
+              Report a Campus Issue
+            </h2>
+            <p className="text-sm text-gray-500">
+              Submit an issue and track its resolution in real time.
+            </p>
+          </div>
 
-          <input
-            required
-            placeholder="Issue title"
-            className="border rounded-lg px-4 py-2"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-          />
+          {/* Title */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Issue Title
+            </label>
+            <input
+              required
+              placeholder="Eg. WiFi not working in hostel block A"
+              className="
+          w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm
+          focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20
+          outline-none transition
+        "
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+            />
+          </div>
 
-          <textarea
-            required
-            placeholder="Describe the issue"
-            className="border rounded-lg px-4 py-2 min-h-[120px]"
-            value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
-          />
-
-          <div className="flex flex-col md:flex-row gap-3">
-            <select
-              className="border rounded-lg px-4 py-2"
-              value={form.category}
+          {/* Description */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Description
+            </label>
+            <textarea
+              required
+              placeholder="Provide more details so the admin can resolve it faster..."
+              className="
+          w-full min-h-[130px] rounded-xl border border-gray-300 px-4 py-2.5 text-sm
+          focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20
+          outline-none transition resize-none
+        "
+              value={form.description}
               onChange={(e) =>
-                setForm({ ...form, category: e.target.value })
+                setForm({ ...form, description: e.target.value })
               }
+            />
+          </div>
+
+          {/* Footer actions */}
+          <div className="flex flex-col md:flex-row md:items-center gap-3 pt-2">
+            <select
+              className="
+          rounded-xl border border-gray-300 px-4 py-2.5 text-sm
+          focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20
+          outline-none transition
+        "
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
             >
               <option value="hostel">Hostel</option>
               <option value="wifi">WiFi</option>
@@ -155,7 +190,12 @@ export default function IssuesPage() {
 
             <button
               disabled={submitting}
-              className="bg-black text-white px-6 py-2 rounded-lg disabled:opacity-60"
+              className="
+          md:ml-auto inline-flex items-center justify-center
+          rounded-xl bg-[var(--accent)] px-6 py-2.5 text-sm font-medium text-white
+          hover:opacity-90 transition
+          disabled:opacity-60 disabled:cursor-not-allowed
+        "
             >
               {submitting ? "Submitting…" : "Submit Issue"}
             </button>
@@ -165,29 +205,25 @@ export default function IssuesPage() {
 
       {/* Tabs */}
       <div className="flex gap-2">
+        <button
+          onClick={() => setActiveTab("all")}
+          className={`px-4 py-2 rounded-lg text-sm font-medium ${
+            activeTab === "all" ? "bg-black text-white" : "border bg-white"
+          }`}
+        >
+          All Issues
+        </button>
+        
         {user && (
           <button
             onClick={() => setActiveTab("mine")}
             className={`px-4 py-2 rounded-lg text-sm font-medium ${
-              activeTab === "mine"
-                ? "bg-black text-white"
-                : "border bg-white"
+              activeTab === "mine" ? "bg-black text-white" : "border bg-white"
             }`}
           >
             My Issues
           </button>
         )}
-
-        <button
-          onClick={() => setActiveTab("all")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium ${
-            activeTab === "all"
-              ? "bg-black text-white"
-              : "border bg-white"
-          }`}
-        >
-          All Issues
-        </button>
       </div>
 
       {/* Filters */}
@@ -227,6 +263,11 @@ export default function IssuesPage() {
         {!loading && filteredIssues.length === 0 && (
           <p className="text-gray-500 text-center">No issues found</p>
         )}
+        {issues.length > 0 && (
+          <p className="text-gray-500 text-center">
+            Total Issues: {issues.length}
+          </p>
+        )}
 
         {filteredIssues.map((issue) => (
           <div
@@ -243,6 +284,9 @@ export default function IssuesPage() {
                   {activeTab === "all" && issue.createdBy?.name && (
                     <> • by {issue.createdBy.name}</>
                   )}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {new Date(issue.createdAt).toLocaleString()}
                 </p>
               </div>
 
