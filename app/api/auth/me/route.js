@@ -7,7 +7,10 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await dbConnect();
-    const token = cookies().get("token")?.value;
+
+    // cookies() is async function
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
 
     if (!token) {
       return NextResponse.json(
@@ -16,11 +19,35 @@ export async function GET() {
       );
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+      return NextResponse.json(
+        { message: "Invalid or expired token" },
+        { status: 401 }
+      );
+    }
+
+    if (!decoded?.id) {
+      return NextResponse.json(
+        { message: "Invalid token payload" },
+        { status: 401 }
+      );
+    }
+
     const user = await User.findById(decoded.id).select("-password");
 
+    if (!user) {
+      return NextResponse.json(
+        { message: "User no longer exists" },
+        { status: 401 }
+      );
+    }
+
     return NextResponse.json(user);
-  } catch {
+  } catch (err) {
+    console.error("AUTH_ME_ERROR:", err);
     return NextResponse.json(
       { message: "Authentication failed" },
       { status: 401 }

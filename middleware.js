@@ -1,29 +1,41 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
-export function middleware(req) {
-  const token = req.cookies.get("token")?.value;
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-  // Protect admin routes
-  if (req.nextUrl.pathname.startsWith("/admin")) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
+export async function middleware(req) {
+  const { pathname } = req.nextUrl;
 
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      if (decoded.role !== "admin") {
-        return NextResponse.redirect(new URL("/unauthorized", req.url));
-      }
-    } catch {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
+  // allowing public routes
+  if (pathname.startsWith("/login") || pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const token = req.cookies.get("token")?.value;
+
+  // if no token → login page
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  try {
+    const { payload } = await jwtVerify(token, secret);
+
+    // admin page protection
+    if (
+      pathname.startsWith("/admin") &&
+      !["admin", "superadmin"].includes(payload.role)
+    ) {
+      return NextResponse.redirect(new URL("/me", req.url));
+    }
+
+    return NextResponse.next();
+  } catch (err) {
+    // Invalid / expired token
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/me"],
 };
