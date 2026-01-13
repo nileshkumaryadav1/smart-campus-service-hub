@@ -10,34 +10,87 @@ const STATUS_COLORS = {
 
 export default function AdminIssuesPage() {
   const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [expanded, setExpanded] = useState({});
 
+  /* =======================
+     Fetch real data
+  ======================== */
   useEffect(() => {
-    fetch("/api/issues", { credentials: "include" })
-      .then((res) => res.json())
-      .then(setIssues);
+    async function fetchIssues() {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/issues", { credentials: "include" });
+        const data = await res.json();
+        setIssues(data);
+      } catch (err) {
+        console.error("Failed to load issues", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchIssues();
   }, []);
 
+  /* Update status */
   async function updateStatus(id, status) {
-    const res = await fetch(`/api/issues/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ status }),
-    });
+    try {
+      const res = await fetch(`/api/issues/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
 
-    const updated = await res.json();
-    setIssues((prev) => prev.map((i) => (i._id === id ? updated : i)));
+      const updated = await res.json();
+      setIssues((prev) => prev.map((i) => (i._id === id ? updated : i)));
+    } catch (err) {
+      console.error("Failed to update status", err);
+    }
   }
 
-  const categories = useMemo(() => {
-    return ["all", ...new Set(issues.map((i) => i.category))];
-  }, [issues]);
+  // delete function
+  const deleteIssue = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this issue? This action cannot be undone."
+    );
 
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/issues/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete issue");
+      }
+
+      // Remove from UI instantly
+      setIssues((prev) => prev.filter((issue) => issue._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong while deleting the issue");
+    }
+  };
+
+  /* =======================
+     Category options
+  ======================== */
+  const categories = useMemo(
+    () => ["all", ...new Set(issues.map((i) => i.category))],
+    [issues]
+  );
+
+  /* =======================
+     Filter & Sort
+  ======================== */
   const filteredIssues = useMemo(() => {
     let data = [...issues];
 
@@ -59,21 +112,18 @@ export default function AdminIssuesPage() {
       data = data.filter((i) => i.category === categoryFilter);
     }
 
-    if (sortBy === "newest") {
+    if (sortBy === "newest")
       data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }
-
-    if (sortBy === "oldest") {
+    if (sortBy === "oldest")
       data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    }
-
-    if (sortBy === "title") {
-      data.sort((a, b) => a.title.localeCompare(b.title));
-    }
+    if (sortBy === "title") data.sort((a, b) => a.title.localeCompare(b.title));
 
     return data;
   }, [issues, search, statusFilter, categoryFilter, sortBy]);
 
+  /* =======================
+     Stats
+  ======================== */
   const stats = {
     total: issues.length,
     pending: issues.filter((i) => i.status === "pending").length,
@@ -82,10 +132,9 @@ export default function AdminIssuesPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      {/* heading */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h1 className="text-2xl font-bold">Issue Management</h1>
-
         <div className="flex gap-3 text-sm">
           <Stat label="Total" value={stats.total} />
           <Stat label="Pending" value={stats.pending} />
@@ -93,10 +142,10 @@ export default function AdminIssuesPage() {
         </div>
       </div>
 
-      {/* Controls for sorting and filtering */}
+      {/* Filters & Sort */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <input
-          placeholder="Search issues..."
+          placeholder="Search by title, category or reporter..."
           className="border rounded-lg px-3 py-2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -136,93 +185,113 @@ export default function AdminIssuesPage() {
         </select>
       </div>
 
-      {/* all issue list */}
-      <div className="space-y-4">
-        {filteredIssues.length === 0 && (
-          <p className="text-center text-gray-500">No issues found</p>
+      {/* Issue List */}
+      <div className="space-y-5">
+        {loading && (
+          <p className="text-gray-500 text-center py-6">Loading issues…</p>
+        )}
+        {!loading && filteredIssues.length === 0 && (
+          <p className="text-center text-gray-500 py-6">No issues found</p>
         )}
 
-        {filteredIssues.map((issue) => {
-          const isExpanded = expanded[issue._id];
-          const shortDesc =
-            issue.description.length > 120
-              ? issue.description.slice(0, 120) + "..."
-              : issue.description;
+        {!loading &&
+          filteredIssues.map((issue) => {
+            const isExpanded = expanded[issue._id];
+            const shortDesc =
+              issue.description.length > 120
+                ? issue.description.slice(0, 120) + "..."
+                : issue.description;
 
-          return (
-            <div
-              key={issue._id}
-              className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
-            >
-              <div className="flex justify-between items-start gap-4">
-                <div>
-                  <h2 className="text-lg font-semibold">{issue.title}</h2>
-                  <p className="text-sm text-gray-500">
-                    {issue.category} • {issue.createdBy?.name}
-                  </p>
+            return (
+              <div
+                key={issue._id}
+                className="bg-white border border-gray-300 rounded-2xl p-5 shadow-sm hover:shadow-lg transition flex flex-col gap-3"
+              >
+                {/* Title & Status */}
+                <div className="flex justify-between items-start gap-3">
+                  <div className="flex flex-col gap-1">
+                    <h2 className="text-lg font-semibold">{issue.title}</h2>
+                    <p className="text-sm text-gray-500">
+                      {issue.category} • {issue.createdBy?.name || "Unknown"}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(issue.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <span
+                    className={`px-3 py-1 text-xs rounded-full font-medium capitalize ${
+                      STATUS_COLORS[issue.status]
+                    }`}
+                  >
+                    {issue.status}
+                  </span>
                 </div>
 
-                <span
-                  className={`px-3 py-1 text-xs rounded-full capitalize ${
-                    STATUS_COLORS[issue.status]
-                  }`}
-                >
-                  {issue.status}
-                </span>
-              </div>
+                {/* Description */}
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {isExpanded ? issue.description : shortDesc}
+                  {issue.description.length > 120 && (
+                    <button
+                      onClick={() =>
+                        setExpanded((prev) => ({
+                          ...prev,
+                          [issue._id]: !prev[issue._id],
+                        }))
+                      }
+                      className="ml-2 text-blue-600 underline text-sm"
+                    >
+                      {isExpanded ? "Show less" : "Read more"}
+                    </button>
+                  )}
+                </p>
 
-              <p className="mt-3 text-gray-700 text-sm">
-                {isExpanded ? issue.description : shortDesc}
-                {issue.description.length > 120 && (
+                {/* Actions */}
+                <div className="flex flex-wrap gap-2 mt-3 justify-between">
+                  <div className="flex flex-wrap gap-2">
+                    {issue.status === "pending" && (
+                      <ActionButton
+                        label="Mark In Progress"
+                        onClick={() => updateStatus(issue._id, "in-progress")}
+                      />
+                    )}
+
+                    {(issue.status === "pending" ||
+                      issue.status === "in-progress") && (
+                      <ActionButton
+                        label="Mark Resolved"
+                        onClick={() => updateStatus(issue._id, "resolved")}
+                      />
+                    )}
+                  </div>
+
+                  {/* Delete Button */}
                   <button
-                    onClick={() =>
-                      setExpanded((p) => ({
-                        ...p,
-                        [issue._id]: !p[issue._id],
-                      }))
-                    }
-                    className="ml-2 text-blue-600 underline"
+                    onClick={() => deleteIssue(issue._id)}
+                    className="px-3 py-1.5 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
                   >
-                    {isExpanded ? "Show less" : "Read more"}
+                    Delete
                   </button>
-                )}
-              </p>
-
-              <div className="flex gap-3 mt-4 text-sm">
-                {issue.status === "pending" && (
-                  <ActionButton
-                    label="Mark In Progress"
-                    onClick={() => updateStatus(issue._id, "in-progress")}
-                  />
-                )}
-
-                {(issue.status === "pending" ||
-                  issue.status === "in-progress") && (
-                  <ActionButton
-                    label="Mark Resolved"
-                    onClick={() => updateStatus(issue._id, "resolved")}
-                  />
-                )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
 }
 
-/* small components */
-
+/* Stat Card */
 function Stat({ label, value }) {
   return (
-    <div className="bg-gray-100 rounded-lg px-4 py-2 text-center">
-      <div className="text-lg font-bold">{value}</div>
-      <div className="text-xs text-gray-600">{label}</div>
+    <div className="bg-gray-100 rounded-xl px-4 py-2 text-center shadow-sm">
+      <p className="text-lg font-bold">{value}</p>
+      <p className="text-xs text-gray-600">{label}</p>
     </div>
   );
 }
 
+/* Action Button */
 function ActionButton({ label, onClick }) {
   return (
     <button

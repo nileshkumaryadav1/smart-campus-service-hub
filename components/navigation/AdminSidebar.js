@@ -112,12 +112,20 @@ export default function AdminSidebar({
       {/* Footer */}
       <div className="border-t border-[var(--border)] px-4 py-4">
         {adminUser && (
-          <>
-            <p className="text-sm font-semibold">{adminUser.name}</p>
-            <p className="text-xs capitalize text-[var(--accent)]">
-              {adminUser.role}
-            </p>
-          </>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold">Name : {adminUser.name}</p>
+              <p className="text-xs capitalize text-[var(--accent)]">
+                Role : {adminUser.role}
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="block p-2 text-red-500 border rounded hover:cursor-pointer"
+            >
+              Logout
+            </button>
+          </div>
         )}
       </div>
     </aside>

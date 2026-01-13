@@ -2,14 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import {
-  Calendar,
-  Bell,
-  Search,
-  AlertCircle,
-} from "lucide-react";
+import { Calendar, Bell, Search, AlertCircle } from "lucide-react";
 
 export default function AdminPage() {
+  const [loading, setLoading] = useState(true);
+
   const [analytics, setAnalytics] = useState({
     events: 0,
     notices: 0,
@@ -17,53 +14,54 @@ export default function AdminPage() {
     issues: 0,
   });
 
-  // fetch counts or the actual data and count from APIs 
-  // for now - (mock example)
+  /* =========================
+     Fetch real data
+     ========================= */
   useEffect(() => {
     async function fetchAnalytics() {
       try {
-        // fetch counts from API endpoints
-        const [eventsRes, noticesRes, lostFoundRes, issuesRes] =
-          await Promise.all([
-            fetch("/api/events/count"),
-            fetch("/api/posts/count?type=notice"),
-            fetch("/api/lost-found/count"),
-            fetch("/api/issues/count"),
-          ]);
+        const [postsRes, lostFoundRes, issuesRes] = await Promise.all([
+          fetch("/api/posts", { credentials: "include" }),
+          fetch("/api/lost-found", { credentials: "include" }),
+          fetch("/api/issues", { credentials: "include" }),
+        ]);
 
-        const events = await eventsRes.json();
-        const notices = await noticesRes.json();
+        const posts = await postsRes.json();
         const lostFound = await lostFoundRes.json();
         const issues = await issuesRes.json();
 
         setAnalytics({
-          events: events.count,
-          notices: notices.count,
-          lostFound: lostFound.count,
-          issues: issues.count,
+          events: posts.filter((p) => p.type === "event").length,
+          notices: posts.filter((p) => p.type === "notice").length,
+          lostFound: lostFound.length,
+          issues: issues.length,
         });
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load dashboard data", err);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchAnalytics();
   }, []);
 
-  // Card data
+  /* =========================
+     Cards config
+     ========================= */
   const cards = [
     {
       label: "Events",
       count: analytics.events,
       icon: Calendar,
-      href: "/admin/notice-events",
+      href: "/admin/posts?type=event",
       color: "bg-blue-100 text-blue-800",
     },
     {
       label: "Notices",
       count: analytics.notices,
       icon: Bell,
-      href: "/admin/notice-events",
+      href: "/admin/posts?type=notice",
       color: "bg-green-100 text-green-800",
     },
     {
@@ -82,29 +80,33 @@ export default function AdminPage() {
     },
   ];
 
+  /* UI */
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+    <div className="p-6 space-y-6 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+
+      {loading && <p className="text-gray-500 text-sm">Loading analytics…</p>}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map(({ label, count, icon: Icon, href, color }) => (
           <div
             key={label}
-            className={`flex flex-col justify-between p-4 rounded-xl shadow hover:shadow-lg transition bg-white`}
+            className="flex flex-col justify-between p-5 rounded-xl border bg-white shadow-sm hover:shadow-md transition"
           >
             <div className="flex items-center gap-4">
               <div className={`p-3 rounded-lg ${color}`}>
-                <Icon size={24} />
+                <Icon size={22} />
               </div>
+
               <div>
                 <p className="text-sm font-medium text-gray-500">{label}</p>
-                <p className="text-2xl font-bold">{count}</p>
+                <p className="text-2xl font-bold">{loading ? "—" : count}</p>
               </div>
             </div>
 
             <Link
               href={href}
-              className="mt-4 inline-block text-sm font-medium text-[color:var(--accent)] hover:underline"
+              className="mt-4 text-sm font-medium text-[color:var(--accent)] hover:underline"
             >
               Go to {label}
             </Link>
