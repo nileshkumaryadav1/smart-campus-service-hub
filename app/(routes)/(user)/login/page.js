@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,11 +28,8 @@ export default function LoginPage() {
         }
 
         const me = await res.json();
-
-        // store user data globally
         setUser(me);
 
-        // redirect based on the role
         if (me.role === "admin" || me.role === "superadmin") {
           router.replace("/admin");
         } else {
@@ -45,7 +43,7 @@ export default function LoginPage() {
     checkSession();
   }, [router, setUser]);
 
-  /* login submit*/
+  /* login submit */
   async function handleSubmit(e) {
     e.preventDefault();
     if (loading) return;
@@ -54,7 +52,6 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // login request (sets JWT cookie)
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,7 +64,6 @@ export default function LoginPage() {
         return;
       }
 
-      // verify session
       const meRes = await fetch("/api/auth/me", {
         credentials: "include",
       });
@@ -80,7 +76,6 @@ export default function LoginPage() {
       const me = await meRes.json();
       setUser(me);
 
-      // redirect
       if (me.role === "admin" || me.role === "superadmin") {
         router.replace("/admin");
       } else {
@@ -94,7 +89,7 @@ export default function LoginPage() {
     }
   }
 
-  /* session checking - loading screen */
+  /* session checking screen */
   if (checkingSession) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -103,40 +98,81 @@ export default function LoginPage() {
     );
   }
 
-  /* login form */
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto mt-20 w-full max-w-md rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm"
-    >
-      <h1 className="mb-4 text-xl font-semibold">Login</h1>
-
-      {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
-
-      <input
-        type="email"
-        placeholder="Email"
-        value={form.email}
-        required
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        className="mb-3 w-full rounded border border-[var(--border)] p-2"
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={form.password}
-        required
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-        className="mb-4 w-full rounded border border-[var(--border)] p-2"
-      />
-
-      <button
-        disabled={loading}
-        className="w-full rounded bg-black py-2 text-white disabled:opacity-60"
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8 shadow-sm"
       >
-        {loading ? "Logging in..." : "Login"}
-      </button>
-    </form>
+        {/* Header */}
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-semibold">Welcome back</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Login to access your dashboard
+          </p>
+        </div>
+
+        {error && (
+          <p className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
+            {error}
+          </p>
+        )}
+
+        {/* Email */}
+        <div className="mb-4">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            type="email"
+            value={form.email}
+            required
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="w-full rounded-lg border border-[var(--border)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+            placeholder="you@college.edu"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-6">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input
+            type="password"
+            value={form.password}
+            required
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            className="w-full rounded-lg border border-[var(--border)] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+            placeholder="••••••••"
+          />
+        </div>
+
+        {/* Button */}
+        <button
+          disabled={loading}
+          className="
+            w-full rounded-xl bg-black py-2.5 text-white font-medium
+            hover:bg-gray-900 transition
+            disabled:opacity-60
+          "
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        {/* Footer */}
+        <div className="mt-6 border-t border-[var(--border)] pt-4 text-center text-sm text-gray-600">
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-medium text-[var(--accent)] hover:underline"
+            >
+              Register
+            </Link>
+          </p>
+        </div>
+      </form>
+    </div>
   );
 }

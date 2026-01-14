@@ -57,14 +57,6 @@ export default function NoticeEventsPage() {
     return data;
   }, [allPosts, search, typeFilter, sortBy]);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center text-gray-500">
-        Loading notices & events…
-      </div>
-    );
-  }
-
   /* user side ui */
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">

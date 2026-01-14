@@ -15,7 +15,7 @@ export default function HomeServiceCards() {
         const [postsRes, lostFoundRes, issuesRes] = await Promise.all([
           fetch("/api/posts", { credentials: "include" }),
           fetch("/api/lost-found", { credentials: "include" }),
-          fetch("/api/issues", { credentials: "include" }),
+          fetch("/api/issues?scope=all", { credentials: "include" }),
         ]);
 
         const posts = await postsRes.json();
@@ -60,31 +60,71 @@ export default function HomeServiceCards() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/*  HERO  */}
-      <section className="bg-white px-4 sm:px-6 py-10 sm:py-16">
-        <div className="max-w-6xl mx-auto text-center space-y-6 sm:space-y-10">
-          {/* Title */}
-          <div className="space-y-3">
-            <h2 className="text-lg sm:text-2xl text-gray-700">
-              Smart Campus Service Hub
-            </h2>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
-              For Colleges
+      {/* ================= HERO (ENHANCED MODE) ================= */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-white via-gray-50 to-white px-4 sm:px-6 py-14 sm:py-24">
+        {/* subtle background accent */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-[var(--accent)]/10 blur-3xl" />
+        </div>
+
+        <div className="max-w-6xl mx-auto text-center space-y-8 sm:space-y-12">
+          {/* Badge */}
+          <div className="flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white px-4 py-1.5 text-xs sm:text-sm font-medium text-gray-600 shadow-sm">
+              🚀 Smart Campus Platform
+            </span>
+          </div>
+
+          {/* Headings */}
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
+              Smart Campus
+              <span className="block text-[var(--accent)]">Service Hub</span>
             </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-lg">
-              A unified digital platform for managing campus events, notices,
-              lost & found, and student issues — with real-time admin control.
+
+            <p className="text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">
+              A unified digital system to manage{" "}
+              <span className="font-medium text-gray-800">
+                notices, events, lost & found, and student issues
+              </span>{" "}
+              — with real-time admin control.
             </p>
           </div>
 
-          {/*  FEATURES  */}
-          {items && (
-            <div className="space-y-4">
-              <h3 className="text-base sm:text-xl font-semibold">
-                Core System Features
-              </h3>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <a
+              href="/login"
+              className="
+          px-6 py-3 rounded-xl
+          bg-[var(--accent)] text-white
+          font-semibold shadow-md
+          hover:shadow-lg hover:scale-[1.02]
+          transition
+        "
+            >
+              Student Login
+            </a>
 
-              {/* Mobile scroll */}
+            <a
+              href="/admin"
+              className="
+          px-6 py-3 rounded-xl
+          border border-[var(--border)]
+          bg-white font-semibold
+          text-gray-700
+          hover:bg-gray-50
+          transition
+        "
+            >
+              Admin Dashboard
+            </a>
+          </div>
+
+          {/* Feature preview strip */}
+          {items && (
+            <div className="pt-6">
+              {/* Mobile */}
               <div
                 ref={scrollRef}
                 className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
@@ -92,29 +132,12 @@ export default function HomeServiceCards() {
                 <HomeServiceCard data={items} />
               </div>
 
-              {/* Desktop grid */}
+              {/* Desktop */}
               <div className="hidden md:block">
                 <HomeServiceCard data={items} />
               </div>
             </div>
           )}
-
-          {/*  LOGIN  */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6 text-sm">
-            <a
-              href="/login"
-              className="px-5 py-2 rounded-full border border-[var(--border)] font-medium text-gray-700 hover:text-[var(--accent)] transition"
-            >
-              Student Login
-            </a>
-            <span className="hidden sm:inline text-gray-300">|</span>
-            <a
-              href="/admin"
-              className="px-5 py-2 rounded-full border border-[var(--border)] font-medium text-gray-700 hover:text-black transition"
-            >
-              Admin Dashboard
-            </a>
-          </div>
         </div>
       </section>
 
@@ -146,21 +169,45 @@ export default function HomeServiceCards() {
         </div>
       </section>
 
-      {/* WORKFLOW  */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4">System Workflow</h2>
-        <p className="text-gray-600 text-sm sm:text-lg">
-          Student submits → Admin reviews → Status updates → Resolution
-        </p>
-        <p className="text-xs sm:text-sm text-gray-500 mt-3">
-          Designed to real-world institutional processes
-        </p>
-      </section>
+      {/* WORKFLOW */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold">System Workflow</h2>
+          <p className="text-gray-600 text-sm sm:text-lg mt-2">
+            Designed to mirror real-world institutional processes
+          </p>
+        </div>
 
-      {/* FOOTER */}
-      <footer className="py-6 text-center text-xs sm:text-sm text-gray-500">
-        Built for Hackathon • Designed for Real Campus Use
-      </footer>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+          {/* Step 1 */}
+          <WorkflowCard
+            step="01"
+            title="Student Submits"
+            desc="Students raise issues, report lost & found, or view events and notices."
+          />
+
+          {/* Step 2 */}
+          <WorkflowCard
+            step="02"
+            title="Admin Reviews"
+            desc="Admins review submissions, verify details, and take action."
+          />
+
+          {/* Step 3 */}
+          <WorkflowCard
+            step="03"
+            title="Status Updates"
+            desc="Real-time status changes are reflected to students instantly."
+          />
+
+          {/* Step 4 */}
+          <WorkflowCard
+            step="04"
+            title="Resolution"
+            desc="Issues are resolved, items recovered, and records archived."
+          />
+        </div>
+      </section>
     </main>
   );
 }
@@ -176,6 +223,19 @@ function RoleCard({ title, points }) {
           <li key={p}>• {p}</li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function WorkflowCard({ step, title, desc }) {
+  return (
+    <div className="relative rounded-2xl border border-[var(--border)] bg-white p-6 text-left shadow-sm hover:shadow-md transition">
+      <span className="absolute -top-3 left-6 rounded-full bg-black px-3 py-1 text-xs font-semibold text-white">
+        Step {step}
+      </span>
+
+      <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+      <p className="mt-2 text-sm text-gray-600">{desc}</p>
     </div>
   );
 }
