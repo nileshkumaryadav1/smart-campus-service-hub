@@ -58,14 +58,6 @@ export default function HomeServiceCards() {
     return () => clearInterval(interval);
   }, [items]);
 
-  if (loading) {
-    return (
-      <p className="min-h-screen flex items-center justify-center text-gray-500">
-        Loading updates…
-      </p>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-gray-50">
       {/*  HERO  */}
@@ -86,24 +78,26 @@ export default function HomeServiceCards() {
           </div>
 
           {/*  FEATURES  */}
-          <div className="space-y-4">
-            <h3 className="text-base sm:text-xl font-semibold">
-              Core System Features
-            </h3>
+          {items && (
+            <div className="space-y-4">
+              <h3 className="text-base sm:text-xl font-semibold">
+                Core System Features
+              </h3>
 
-            {/* Mobile scroll */}
-            <div
-              ref={scrollRef}
-              className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
-            >
-              <HomeServiceCard data={items} />
-            </div>
+              {/* Mobile scroll */}
+              <div
+                ref={scrollRef}
+                className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+              >
+                <HomeServiceCard data={items} />
+              </div>
 
-            {/* Desktop grid */}
-            <div className="hidden md:block">
-              <HomeServiceCard data={items} />
+              {/* Desktop grid */}
+              <div className="hidden md:block">
+                <HomeServiceCard data={items} />
+              </div>
             </div>
-          </div>
+          )}
 
           {/*  LOGIN  */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6 text-sm">

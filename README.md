@@ -1,118 +1,154 @@
-
 # Smart Campus Service Hub
 
-A simple web application that works as a **single digital platform for college campus services**.
-It helps students and admins manage notices, events, issues, and lost & found items easily.
+Smart Campus Service Hub is a modern, web-based platform designed as a **single digital solution for college campus services**.  
+It streamlines communication between students and administrators by centralizing notices, events, issues, and lost & found items into one unified system.
 
 ---
 
-## Problem Statement 
-Students usually get campus information from many different places like notice boards, WhatsApp groups, or word of mouth.  
-This causes confusion and missed updates.
+## Live Deployment
 
-**Smart Campus Service Hub** solves this by providing **one common platform** for all campus-related information.
+**Platform:** Vercel  
+**Live URL:** https://smart-campus-service-hub.vercel.app/
 
 ---
 
-## Project's motivation
-- Provide one place for all campus notices and events
-- Allow students to raise complaints online
-- Manage lost & found items digitally
-- Make communication between students and admins easy
+## Test Credentials
+
+### Admin
+- **Email:** admin@gmail.com  
+- **Password:** 12345678  
+
+### Student
+- **Email:** student@gmail.com  
+- **Password:** 12345678  
+
+---
+
+## Problem Statement
+
+In many colleges, important campus information is scattered across physical notice boards, WhatsApp groups, and informal communication channels.  
+This fragmentation results in missed updates, confusion, and inefficient issue resolution.
+
+**Smart Campus Service Hub** addresses this problem by providing **one centralized digital platform** for all campus-related services and updates.
+
+---
+
+## Project Motivation
+
+- Establish a single source of truth for campus notices and events  
+- Enable students to raise complaints digitally  
+- Organize lost & found items in a structured system  
+- Improve transparency and communication between students and administrators  
+
+---
+
+## Key Features
+
+- User authentication for Students and Admins  
+- Role-based access control  
+- Notices and Events management  
+- Issue and complaint tracking system  
+- Lost & Found management module  
+- Search and filter functionality  
+- Fully responsive user interface  
+
+---
+
+## Technology Stack
+
+### Frontend
+- Next.js  
+- React.js  
+- Tailwind CSS  
+
+### Backend
+- Next.js API Routes  
+- MongoDB  
+- Mongoose  
+- JWT Authentication  
+
+### Deployment & Infrastructure
+- Vercel  
+- MongoDB Atlas  
 
 ---
 
 ## User Roles
 
 ### Student
-- Register and login
-- View notices and events
-- Raise issues (hostel, wifi, classroom, etc.)
-- Add lost or found items
-- Search and filter information
+- Secure registration and login  
+- View campus notices and events  
+- Raise and track campus issues (hostel, WiFi, classroom, etc.)  
+- Report lost or found items  
+- Search and filter information  
 
 ### Admin
-- Login as admin
-- Post notices and events
-- View and update student issues
-- Manage lost & found posts
+- Secure admin login  
+- Create and manage notices and events  
+- Review and update student issues  
+- Manage lost & found submissions  
 
 ---
 
-## Technology Used
+## Phase-wise Development
 
-### Frontend
-- Next.js
-- React.js
-- Tailwind CSS
-
-### Backend
-- Next.js API Routes
-- MongoDB
-- Mongoose
-- JWT Authentication
-
-### Deployment
-- Vercel
-- MongoDB Atlas
-
----
-
-## Main Features
-- User Authentication (Student / Admin)
-- Role-based access control
-- Notices and events section
-- Issue / complaint management
-- Lost & found section
-- Search and filter functionality
-- Responsive UI
+- Phase 0: Project Setup  
+- Phase 1: Authentication and Role Management  
+- Phase 2: Notices and Events Module  
+- Phase 3: Issues and Complaints Module  
+- Phase 4: Lost & Found Module  
+- Phase 5: Search and Filter  
+- Phase 6: UI and UX Enhancements  
+- Phase 7: Deployment  
 
 ---
 
 ## Project Structure
+
 ```
 /app
+  /api
 /components
 /models
-/api
 /public
 ```
+
 ---
 
 ## Database Collections
 
 ### User
-- name
-- email
-- password
-- role
+- name  
+- email  
+- password  
+- role  
 
 ### Post
-- title
-- description
-- type (notice/event)
-- createdAt
+- title  
+- description  
+- type (notice or event)  
+- createdAt  
 
 ### Issue
-- title
-- category
-- description
-- status
+- title  
+- category  
+- description  
+- status  
 
 ### Lost & Found
-- itemName
-- description
-- type (lost/found)
-- contact
+- itemName  
+- description  
+- type (lost or found)  
+- contact  
 
 ---
 
-## Setup & Installation
+## Setup and Installation
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB Atlas account
-- Git
+- Node.js (v18 or higher)  
+- MongoDB Atlas account  
+- Git  
 
 ### Step 1: Clone the Repository
 ```
@@ -125,8 +161,9 @@ cd smart-campus-service-hub
 npm install
 ```
 
-### Step 3: Create Environment File
-Create a file named `.env.local` and add:
+### Step 3: Configure Environment Variables
+
+Create a `.env.local` file and add:
 ```
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
@@ -134,12 +171,12 @@ NEXTAUTH_SECRET=your_nextauth_secret
 NEXTAUTH_URL=http://localhost:3000
 ```
 
-### Step 4: Run the Project
+### Step 4: Run the Application
 ```
 npm run dev
 ```
 
-Open browser and visit:
+Access the application at:
 ```
 http://localhost:3000
 ```
@@ -147,51 +184,57 @@ http://localhost:3000
 ---
 
 ## Deployment Steps
-1. Push project to GitHub
-2. Login to Vercel
-3. Import GitHub repository
-4. Add environment variables
-5. Click Deploy
+
+1. Push the project to GitHub  
+2. Log in to Vercel  
+3. Import the GitHub repository  
+4. Add required environment variables  
+5. Deploy the project  
 
 ---
 
 ## Testing
-- Manual testing of UI
-- API testing using browser/Postman
-- Role-based access testing
+
+- Manual UI testing  
+- API testing using browser or Postman  
+- Role-based access validation  
 
 ---
 
 ## Limitations
-- No email notifications
-- Limited admin analytics
-- No mobile app
+
+- No email notification system  
+- Limited admin analytics  
+- No dedicated mobile application  
 
 ---
 
-## Future Improvements
-- Mobile application
-- Push notifications
-- Admin analytics dashboard
-- PWA support
+## Future Enhancements
+
+- Mobile application support  
+- Push notifications  
+- Advanced admin analytics dashboard  
+- Progressive Web App (PWA) support  
 
 ---
 
 ## Conclusion
-Smart Campus Service Hub makes campus communication simple, digital, and organized.
-It saves time for students and admins and improves overall campus management.
+
+Smart Campus Service Hub simplifies campus communication by making it digital, transparent, and efficient.  
+It reduces dependency on fragmented communication channels and improves overall campus management.
 
 ---
 
-## Developer
-- **Nilesh Kumar**  
-B.Tech (2024-28)  
-Katihar Engineering College, Katihar
+## Developers
 
-- **Swati Priya**  
-B.Tech (2024-28)  
-Katihar Engineering College, Katihar
+**Nilesh Kumar**  
+B.Tech (2024–2028)  
+Katihar Engineering College, Katihar  
 
-- **Jeevan Prem**  
-B.Tech (2024-28)  
-Katihar Engineering College, Katihar
+**Swati Priya**  
+B.Tech (2024–2028)  
+Katihar Engineering College, Katihar  
+
+**Jeevan Prem**  
+B.Tech (2024–2028)  
+Katihar Engineering College, Katihar  
